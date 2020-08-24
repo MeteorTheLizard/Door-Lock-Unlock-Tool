@@ -23,28 +23,35 @@ TOOL.Information = {
 	}
 }
 
+local Classes = { -- https://developer.valvesoftware.com/wiki/Doors
+	["func_door"] = true,
+	["func_door_rotating"] = true,
+	["prop_door_rotating"] = true,
+	["prop_testchamber_door"] = true
+}
+
 function TOOL:LeftClick(trace)
 	local Ent = trace.Entity
-	if not IsValid(Ent) then return end
+	if not IsValid(Ent) or not Classes[Ent:GetClass()] then return false end
 
 	if SERVER then
 		Ent:Fire("lock")
 		Ent:EmitSound("doors/latchlocked2.wav")
 	end
 
-	return false
+	return true
 end
 
 function TOOL:RightClick(trace)
 	local Ent = trace.Entity
-	if not IsValid(Ent) then return end
+	if not IsValid(Ent) or not Classes[Ent:GetClass()] then return false end
 
 	if SERVER then
 		Ent:Fire("unlock")
 		Ent:EmitSound("doors/latchunlocked1.wav")
 	end
 
-	return false
+	return true
 end
 
 function TOOL:Reload()
